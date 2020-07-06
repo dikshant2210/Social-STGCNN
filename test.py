@@ -13,6 +13,7 @@ from utils import *
 from metrics import * 
 from model import social_stgcnn
 import copy
+import time
 
 def test(KSTEPS=20):
     global loader_test,model
@@ -20,7 +21,9 @@ def test(KSTEPS=20):
     ade_bigls = []
     fde_bigls = []
     raw_data_dict = {}
-    step =0 
+    step =0
+
+    t0 = time.time()
     for batch in loader_test: 
         step+=1
         #Get data
@@ -36,7 +39,7 @@ def test(KSTEPS=20):
         #V_obs_tmp = batch,feat,seq,node
         V_obs_tmp =V_obs.permute(0,3,1,2)
 
-        V_pred,_ = model(V_obs_tmp,A_obs.squeeze())
+        V_pred,_ = model(V_obs_tmp, A_obs.squeeze())
         # print(V_pred.shape)
         # torch.Size([1, 5, 12, 2])
         # torch.Size([12, 2, 5])
@@ -120,14 +123,16 @@ def test(KSTEPS=20):
         for n in range(num_of_objs):
             ade_bigls.append(min(ade_ls[n]))
             fde_bigls.append(min(fde_ls[n]))
+    t1 = time.time()
+    print("Time taken: {0:.4f}s per sample".format((t1 - t0) / len(loader_test)))
 
     ade_ = sum(ade_bigls)/len(ade_bigls)
     fde_ = sum(fde_bigls)/len(fde_bigls)
     return ade_,fde_,raw_data_dict
 
 
-paths = ['./checkpoint/*social-stgcnn*']
-KSTEPS=20
+paths = ['./checkpoint/social-stgcnn-msp3-val08']
+KSTEPS=1
 
 print("*"*50)
 print('Number of samples:',KSTEPS)
@@ -168,7 +173,7 @@ for feta in range(len(paths)):
                 data_set+'test/',
                 obs_len=obs_seq_len,
                 pred_len=pred_seq_len,
-                skip=1,norm_lap_matr=True)
+                skip=70,norm_lap_matr=True)
 
         loader_test = DataLoader(
                 dset_test,
@@ -198,7 +203,7 @@ for feta in range(len(paths)):
 
 
 
-    print("*"*50)
-
-    print("Avg ADE:",sum(ade_ls)/5)
-    print("Avg FDE:",sum(fde_ls)/5)
+    # print("*"*50)
+    #
+    # print("Avg ADE:",sum(ade_ls)/5)
+    # print("Avg FDE:",sum(fde_ls)/5)

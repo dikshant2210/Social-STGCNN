@@ -106,8 +106,7 @@ def bivariate_loss(V_pred,V_trgt):
     # Numerical stability
     epsilon = 1e-20
 
-    result = -torch.log(torch.clamp(result, min=epsilon))
+    result = -torch.log(torch.clamp(result, min=epsilon, max=1.0))
     result = torch.mean(result)
     
     return result
-   

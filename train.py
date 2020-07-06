@@ -38,9 +38,9 @@ parser.add_argument('--n_txpcnn', type=int, default=5, help='Number of TXPCNN la
 parser.add_argument('--kernel_size', type=int, default=3)
 
 #Data specifc paremeters
-parser.add_argument('--obs_seq_len', type=int, default=8)
-parser.add_argument('--pred_seq_len', type=int, default=12)
-parser.add_argument('--dataset', default='eth',
+parser.add_argument('--obs_seq_len', type=int, default=40)
+parser.add_argument('--pred_seq_len', type=int, default=30)
+parser.add_argument('--dataset', default='msp3',
                     help='eth,hotel,univ,zara1,zara2')    
 
 #Training specifc parameters
@@ -80,11 +80,12 @@ obs_seq_len = args.obs_seq_len
 pred_seq_len = args.pred_seq_len
 data_set = './datasets/'+args.dataset+'/'
 
+print("Training dataset........")
 dset_train = TrajectoryDataset(
         data_set+'train/',
         obs_len=obs_seq_len,
         pred_len=pred_seq_len,
-        skip=1,norm_lap_matr=True)
+        skip=70,norm_lap_matr=True)
 
 loader_train = DataLoader(
         dset_train,
@@ -92,12 +93,12 @@ loader_train = DataLoader(
         shuffle =True,
         num_workers=0)
 
-
+print("Validation dataset......")
 dset_val = TrajectoryDataset(
         data_set+'val/',
         obs_len=obs_seq_len,
         pred_len=pred_seq_len,
-        skip=1,norm_lap_matr=True)
+        skip=70,norm_lap_matr=True)
 
 loader_val = DataLoader(
         dset_val,
