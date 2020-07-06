@@ -22,6 +22,7 @@ def test(KSTEPS=20):
     fde_bigls = []
     raw_data_dict = {}
     step =0
+    print("Num of samples: ", KSTEPS)
 
     t0 = time.time()
     for batch in loader_test: 
@@ -134,12 +135,6 @@ def test(KSTEPS=20):
 paths = ['./checkpoint/social-stgcnn-msp3-val08']
 KSTEPS=1
 
-print("*"*50)
-print('Number of samples:',KSTEPS)
-print("*"*50)
-
-
-
 
 for feta in range(len(paths)):
     ade_ls = [] 
@@ -193,15 +188,12 @@ for feta in range(len(paths)):
         ade_ =999999
         fde_ =999999
         print("Testing ....")
-        ad,fd,raw_data_dic_= test()
+        ad,fd,raw_data_dic_= test(KSTEPS)
         ade_= min(ade_,ad)
         fde_ =min(fde_,fd)
         ade_ls.append(ade_)
         fde_ls.append(fde_)
         print("ADE:",ade_," FDE:",fde_)
-
-
-
 
     # print("*"*50)
     #
